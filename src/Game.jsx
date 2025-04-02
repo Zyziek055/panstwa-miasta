@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:3000'); // Connect to the server
 
 //create game component
 export function Game({ selectedCategories }) {
   const [randomLetter, setRandomLetter] = useState('');
   const [showLetterScreen, setShowLetterScreen] = useState(true); // controls when to hide display letter
 
-  //function to generate a random letter
-  const generateRandomLetter = () => {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
-    return alphabet[Math.floor(Math.random() * alphabet.length)];
-  };
 
   //draw a letter
   useEffect(() => {
-    const letter = generateRandomLetter();
-    console.log('Generated letter:', letter);
-    setRandomLetter(generateRandomLetter());
-    const timer = setTimeout(() => {
-        setShowLetterScreen(false); //hide letter screen after 5 seconds
-    }, 5000);
+    
+    socket.emit('startGame', gameId); // Emit the event to start the game
 
-    return () => clearTimeout(timer); //clear timer 
-  } , []); 
+    socket.on('gameStarted', ({ randomLetter }) => {
+      setRandomLetter(randomLetter); // Set the random letter received from the server
+      console.log('Game started with letter:', randomLetter);
+      setTimeout(() => setShowLetterScreen(false), 5000);
+    });
+
+        return () => socket.disconnect(); 
+    }, [gameId, nickname]);
+
+
 
     return (
         <div className="game">

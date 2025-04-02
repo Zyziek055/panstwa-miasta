@@ -9,15 +9,16 @@ function App() {
   const [nickname, setNickname] = useState('');
   const [errorMessgae, setErrorMessage] = useState('');
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [gameId, setGameId] = useState('');
 
   const handleNicknameChange = (event) => {
     setNickname(event.target.value);
   }
 
-
-  const startGame = (categories) => {
-    setSelectedCategories(categories);
-    setGameMode('game');
+  const startGame = (gameId, categories) => {
+      setGameId(gameId);
+      setSelectedCategories(categories);
+      setGameMode('game');
   };
 
   return (
@@ -32,7 +33,7 @@ function App() {
       ) : (
         <div>
           {gameMode === 'create' && <CreateGame onStartGame={startGame} />}
-          {gameMode === 'game' && <Game selectedCategories={selectedCategories} />}
+          {gameMode === 'game' && <Game gameId={gameId} selectedCategories={selectedCategories} />}
           {gameMode === 'join' && <JoinGame />}
         </div>
       )}
