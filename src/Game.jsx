@@ -46,7 +46,7 @@ export function Game({ selectedCategories }) {
             )}
         </div>
     );
-
+  }
 
 //random styles because otherwise its invisible
 const letterScreenStyle = {
