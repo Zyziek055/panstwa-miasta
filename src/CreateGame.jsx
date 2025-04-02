@@ -11,9 +11,14 @@ export function CreateGame() {
         'Animal'
     ]
 
-    const [selectedCategories, setSelectedCategories] = useState([]);
+    //make town and country default categories
+    const defaultCategories = ['Country', 'Town'];
+    const [selectedCategories,  setSelectedCategories] = useState(defaultCategories);
 
     const toggleCategory = (category) => {
+        //If its default, do nothing
+        if (defaultCategories.includes(category)) return;
+        
         setSelectedCategories((prev) => {
             if (prev.includes(category)) {
                 return prev.filter((cat) => cat !== category);
@@ -23,7 +28,9 @@ export function CreateGame() {
         });
     }
 
+
     return (
+        //map categories to make checkbox list 
         <div className="create-game">
             <h1>Create Game</h1>
             <div className="categories">
@@ -39,7 +46,8 @@ export function CreateGame() {
                     </div>
                 ))}
             </div>
-            <button onClick={() => console.log(selectedCategories)}>Create Game</button>
+            {/* Print out selectedCategories */}
+            <button onClick={() => console.log(selectedCategories)}>Create Game</button> 
         </div>
     );
 }
