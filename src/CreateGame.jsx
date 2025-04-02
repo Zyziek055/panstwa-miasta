@@ -1,7 +1,6 @@
 import React, {use, useState} from 'react';
-import { useNavigate } from 'react-router-dom'; //this will be used to navigate to the game page
 
-export function CreateGame() {
+export function CreateGame({ onStartGame }) {
     const categoriesList = [
         'Country',
         'Town',
@@ -15,7 +14,6 @@ export function CreateGame() {
     //make town and country default categories
     const defaultCategories = ['Country', 'Town'];
     const [selectedCategories,  setSelectedCategories] = useState(defaultCategories);
-    navigate = useNavigate(); //initialize navigate
 
 
     //function to handle category selection
@@ -32,10 +30,9 @@ export function CreateGame() {
         });
     }
 
-    //function to start the game
+    //function to start the game in App.jsx
     const startGame = () => {
-        setSelectedCategories(selectedCategories);
-        navigate('/game');
+        onStartGame(selectedCategories);
     };
 
     return (
@@ -56,7 +53,7 @@ export function CreateGame() {
                 ))}
             </div>
             {/* Initiate new game */}
-            <button onClick={startGame}>Create Game</button> 
+            <button onClick={startGame}>Start Game</button> 
         </div>
     );
 }

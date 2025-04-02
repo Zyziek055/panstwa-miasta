@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import {CreateGame} from './CreateGame'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Game } from './Game'
 import './App.css'
 
 function App() {
@@ -9,10 +8,17 @@ function App() {
   const [gameMode, setGameMode] = useState('');
   const [nickname, setNickname] = useState('');
   const [errorMessgae, setErrorMessage] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const handleNicknameChange = (event) => {
     setNickname(event.target.value);
   }
+
+
+  const startGame = (categories) => {
+    setSelectedCategories(categories);
+    setGameMode('game');
+  };
 
   return (
     <div className="App">
@@ -25,7 +31,8 @@ function App() {
         </div>
       ) : (
         <div>
-          {gameMode === 'create' && <CreateGame />}
+          {gameMode === 'create' && <CreateGame onStartGame={startGame} />}
+          {gameMode === 'game' && <Game selectedCategories={selectedCategories} />}
           {gameMode === 'join' && <JoinGame />}
         </div>
       )}
