@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-
+import React, {use, useState} from 'react';
+import { useNavigate } from 'react-router-dom'; //this will be used to navigate to the game page
 
 export function CreateGame() {
     const categoriesList = [
@@ -15,7 +15,10 @@ export function CreateGame() {
     //make town and country default categories
     const defaultCategories = ['Country', 'Town'];
     const [selectedCategories,  setSelectedCategories] = useState(defaultCategories);
+    navigate = useNavigate(); //initialize navigate
 
+
+    //function to handle category selection
     const toggleCategory = (category) => {
         //If its default, do nothing
         if (defaultCategories.includes(category)) return;
@@ -29,6 +32,11 @@ export function CreateGame() {
         });
     }
 
+    //function to start the game
+    const startGame = () => {
+        setSelectedCategories(selectedCategories);
+        navigate('/game');
+    };
 
     return (
         //map categories to make checkbox list 
@@ -47,8 +55,8 @@ export function CreateGame() {
                     </div>
                 ))}
             </div>
-            {/* Print out selectedCategories */}
-            <button onClick={() => console.log(selectedCategories)}>Create Game</button> 
+            {/* Initiate new game */}
+            <button onClick={startGame}>Create Game</button> 
         </div>
     );
 }
