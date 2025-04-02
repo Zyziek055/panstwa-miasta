@@ -1,8 +1,7 @@
 const { Server } = require('socket.io');
 const http = require('http');
-const { Socket } = require('dgram');
 
-//create a server
+// Create a server
 const server = http.createServer();
 const io = new Server(server, {
   cors: {
@@ -10,9 +9,7 @@ const io = new Server(server, {
   },
 });
 
-let games = {}; //this will store data about the games
-
-//function to generate a random letter
+// Function to generate a random letter
 const generateRandomLetter = () => {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   return alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -20,17 +17,19 @@ const generateRandomLetter = () => {
 
 // Function to generate a unique game ID
 const generateGameId = () => {
-  return `${Math.floor(1000 + Math.random() * 9000)}`; // Generuje 4-cyfrowe ID
+  return `${Math.floor(1000 + Math.random() * 9000)}`;
 };
+
+const games = {}; // Store game data
 
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
   socket.on('createGame', ({ nickname, categories }) => {
-    const gameId = generateGameId(); // Generate a unique game ID
+    const gameId = generateGameId();
 
     games[gameId] = {
-      players: [{ id: socket.id, nickname, words: {} }],
+      players: [{ id: socket.id, nickname }],
       categories,
       randomLetter: '',
       gameState: 'waiting',
@@ -38,13 +37,15 @@ io.on('connection', (socket) => {
 
     socket.join(gameId);
     console.log(`Game ${gameId} created by ${nickname}`);
-    socket.emit('gameCreated', { gameId, nickname, categories });
+
+    socket.emit('gameCreated', { gameId, categories });
+    io.to(gameId).emit('updateGame', { players: games[gameId].players }); // Emit the initial player list
   });
 
   socket.on('startGame', (gameId) => {
     const game = games[gameId];
     if (!game) {
-      socket.emit('error', 'Game not found!');
+      socket.emit('error', { message: 'Game not found!' });
       return;
     }
 
@@ -55,27 +56,35 @@ io.on('connection', (socket) => {
     console.log(`Game ${gameId} started with letter ${game.randomLetter}`);
   });
 
-
   socket.on('joinGame', ({ gameId, nickname }) => {
-    // check if the game exists
     const game = games[gameId];
     if (!game) {
-      socket.emit('error', 'Game not found!');
+      socket.emit('error', { message: 'Game not found!' });
       return;
     }
 
-    //add the player to the game
-    game.players.push({ id: socket.id, nickname, words: {}});
+    game.players.push({ id: socket.id, nickname });
     socket.join(gameId);
     console.log(`Player ${nickname} joined game ${gameId}`);
 
-
-    //send the updated game data to the new player
+    // Emit updated player list and categories
+    io.to(gameId).emit('updateGame', { players: game.players });
     socket.emit('gameData', { players: game.players, categories: game.categories });
+  });
 
-    //update the game state for all players
-    io.to(gameId).emit('updateGame', { players: game.players});
-  })
+  socket.on('disconnect', () => {
+    console.log('A user disconnected:', socket.id);
+    for (const gameId in games) {
+      const game = games[gameId];
+      game.players = game.players.filter((player) => player.id !== socket.id);
+      if (game.players.length === 0) {
+        delete games[gameId];
+        console.log(`Game ${gameId} deleted as no players are left.`);
+      } else {
+        io.to(gameId).emit('updateGame', { players: game.players });
+      }
+    }
+  });
 });
 
 server.listen(3000, () => {

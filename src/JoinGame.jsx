@@ -7,22 +7,24 @@ export function JoinGame({ onGameJoined }) {
   const [gameId, setGameId] = useState('');
   const [nickname, setNickname] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const joinGame = () => {
     if (!gameId || !nickname) {
       alert('Please enter both Game ID and Nickname!');
       return;
     }
-  
+
     console.log('Emitting joinGame with:', { gameId, nickname });
     socket.emit('joinGame', { gameId, nickname });
-  
+
     socket.on('gameData', ({ players, categories }) => {
       console.log('Game data received:', { players, categories });
-      onGameJoined(gameId, players, categories); // Przełącz widok na Lobby
+      onGameJoined(gameId, nickname, players, categories); // Pass categories to parent
+      setSelectedCategories(categories); // Update categories state
     });
-  
-    socket.on('error', ({ message }) => {
+
+    socket.on('error', (message) => {
       console.error('Error received:', message);
       setErrorMessage(message);
     });
