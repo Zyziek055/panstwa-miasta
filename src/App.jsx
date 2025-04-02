@@ -1,44 +1,62 @@
 import { useState } from 'react'
-import {CreateGame} from './CreateGame'
+import { CreateGame } from './CreateGame'
+import { JoinGame } from './JoinGame'
 import { Game } from './Game'
+import { Lobby } from './Lobby';
+
 import './App.css'
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameMode, setGameMode] = useState('');
   const [nickname, setNickname] = useState('');
-  const [errorMessgae, setErrorMessage] = useState('');
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [gameId, setGameId] = useState('');
-
-  const handleNicknameChange = (event) => {
-    setNickname(event.target.value);
-  }
+  const [players, setPlayers] = useState([]); 
 
   const startGame = (gameId, categories) => {
-      setGameId(gameId);
-      setSelectedCategories(categories);
-      setGameMode('game');
+    console.log('Starting game with ID:', gameId, 'and categories:', categories);
+    setGameId(gameId);
+    setSelectedCategories(categories);
+    setGameMode('waiting'); // Przełącz widok na Lobby
+  };
+
+  const joinGame = (gameId, players, categories) => {
+    setGameId(gameId);
+    setPlayers(players);
+    setSelectedCategories(categories);
+    setGameMode('waiting'); 
   };
 
   return (
-    <div className="App">
-      {!gameStarted ? (
-        <div className="start-screen">
-          <h1>Welcome to the Game!</h1>
-          <button onClick={() => {setGameMode('create'); setGameStarted(true);} }>Create Game</button>
-          <button onClick={() => {setGameMode('join'); setGameStarted(true);} }>Join Game</button>
-
-        </div>
-      ) : (
-        <div>
-          {gameMode === 'create' && <CreateGame onStartGame={startGame} />}
-          {gameMode === 'game' && <Game gameId={gameId} selectedCategories={selectedCategories} />}
-          {gameMode === 'join' && <JoinGame />}
-        </div>
-      )}
+    <div>
+      WILKOMMEN
+        {gameMode === '' && (
+            <div>
+                <button onClick={() => setGameMode('create')}>Create Game</button>
+                <button onClick={() => setGameMode('join')}>Join Game</button>
+            </div>
+        )}
+        {gameMode === 'create' && (
+          <CreateGame
+            onStartGame={startGame}
+          />
+        )}
+        {gameMode === 'join' && <JoinGame onGameJoined={joinGame} />}
+        {gameMode === 'waiting' && (
+          <Lobby
+            gameId={gameId}
+            players={players}
+            selectedCategories={selectedCategories}
+            isCreator={false} // Gracz dołączający
+            onStartGame={() => startGame(gameId, selectedCategories)} // Tylko założyciel może rozpocząć grę
+          />
+        )}
+        {gameMode === 'game' && (
+            <Game gameId={gameId} nickname={nickname} selectedCategories={selectedCategories} />
+        )}
     </div>
-  )
+);
 }
 
 export default App

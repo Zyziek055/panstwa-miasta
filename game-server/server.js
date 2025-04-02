@@ -54,6 +54,28 @@ io.on('connection', (socket) => {
     io.to(gameId).emit('gameStarted', { randomLetter: game.randomLetter });
     console.log(`Game ${gameId} started with letter ${game.randomLetter}`);
   });
+
+
+  socket.on('joinGame', ({ gameId, nickname }) => {
+    // check if the game exists
+    const game = games[gameId];
+    if (!game) {
+      socket.emit('error', 'Game not found!');
+      return;
+    }
+
+    //add the player to the game
+    game.players.push({ id: socket.id, nickname, words: {}});
+    socket.join(gameId);
+    console.log(`Player ${nickname} joined game ${gameId}`);
+
+
+    //send the updated game data to the new player
+    socket.emit('gameData', { players: game.players, categories: game.categories });
+
+    //update the game state for all players
+    io.to(gameId).emit('updateGame', { players: game.players});
+  })
 });
 
 server.listen(3000, () => {

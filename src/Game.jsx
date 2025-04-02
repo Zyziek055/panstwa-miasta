@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 const socket = io('http://localhost:3000'); // Connect to the server
 
 //create game component
-export function Game({ selectedCategories }) {
+export function Game({ gameId, nickname, selectedCategories }) {
   const [randomLetter, setRandomLetter] = useState('');
   const [showLetterScreen, setShowLetterScreen] = useState(true); // controls when to hide display letter
 
@@ -29,7 +29,6 @@ export function Game({ selectedCategories }) {
         <div className="game">
            {/* show letter screen while shoLetterScreen is true */}
           {showLetterScreen ? (
-                // Ekran z literą na pełnym ekranie
                 <div className="letter-screen" style={letterScreenStyle}>
                     <h1 style={letterStyle}>{randomLetter}</h1>
                 </div>

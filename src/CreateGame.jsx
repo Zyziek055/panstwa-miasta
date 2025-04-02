@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:3000'); // Connect to server
@@ -19,6 +19,9 @@ export function CreateGame({ onStartGame }) {
   const [nickname, setNickname] = useState('');
   const [gameCreated, setGameCreated] = useState(false);
   const [gameId, setGameId] = useState('');
+  const[players, setPlayers] = useState([]); // state to store players
+  const [isCreator, setIsCreator] = useState(false); // Czy gracz jest założycielem gry
+
 
   const toggleCategory = (category) => {
     if (defaultCategories.includes(category)) return;
@@ -42,9 +45,8 @@ export function CreateGame({ onStartGame }) {
 
     socket.once('gameCreated', ({ gameId, nickname, categories }) => {
         console.log(`Game ${gameId} created by ${nickname}, with categories: ${categories}`);
-        setGameId(gameId); // Save the generated gameId
-        setGameCreated(true);
-    });
+        onStartGame(gameId, categories);
+      });
 
     socket.on('error', ({ message }) => {
       alert(message);
@@ -53,36 +55,26 @@ export function CreateGame({ onStartGame }) {
 
   return (
     <div>
-      {!gameCreated ? (
-        <div>
-          <h1>Create a New Game</h1>
+      <h1>Create a New Game</h1>
+      <input
+        type="text"
+        placeholder="Enter Your Nickname"
+        value={nickname}
+        onChange={(e) => setNickname(e.target.value)}
+      />
+      <h3>Select Categories:</h3>
+      {categoriesList.map((category) => (
+        <div key={category}>
           <input
-            type="text"
-            placeholder="Enter Your Nickname"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
+            type="checkbox"
+            id={category}
+            checked={selectedCategories.includes(category)}
+            onChange={() => toggleCategory(category)}
           />
-          <h3>Select Categories:</h3>
-          {categoriesList.map((category) => (
-            <div key={category}>
-              <input
-                type="checkbox"
-                id={category}
-                checked={selectedCategories.includes(category)}
-                onChange={() => toggleCategory(category)}
-              />
-              <label htmlFor={category}>{category}</label>
-            </div>
-          ))}
-          <button onClick={createGame}>Create Game</button>
+          <label htmlFor={category}>{category}</label>
         </div>
-      ) : (
-        <div>
-          <h1>Waiting for players...</h1>
-          <p>Game ID: {gameId}</p>
-          <button onClick={() => onStartGame(gameId, selectedCategories)}>Start Game</button>
-        </div>
-      )}
+      ))}
+      <button onClick={createGame}>Create Game</button>
     </div>
   );
 }
