@@ -7,46 +7,48 @@ export function JoinGame({ onGameJoined }) {
   const [gameId, setGameId] = useState('');
   const [nickname, setNickname] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const joinGame = () => {
     if (!gameId || !nickname) {
-      alert('Please enter both Game ID and Nickname!');
+      setErrorMessage('Please enter both Game ID and Nickname!');
       return;
     }
 
-    console.log('Emitting joinGame with:', { gameId, nickname });
+    console.log('Attempting to join game:', { gameId, nickname });
+    
+    // Emit joinGame event to server
     socket.emit('joinGame', { gameId, nickname });
 
-    socket.on('gameData', ({ players, categories }) => {
-      console.log('Game data received:', { players, categories });
-      onGameJoined(gameId, nickname, players, categories); // Pass categories to parent
-      setSelectedCategories(categories); // Update categories state
+    // Listen for gameData response
+    socket.once('gameData', ({ players, categories }) => {
+      console.log('Received game data:', { players, categories });
+      onGameJoined(gameId, nickname, players, categories); // Dodajemy nickname
     });
 
-    socket.on('error', (message) => {
-      console.error('Error received:', message);
+    // Handle potential errors
+    socket.once('error', ({ message }) => {
+      console.error('Error joining game:', message);
       setErrorMessage(message);
     });
   };
 
-    return (
-      <div>
-          <h1>Join a Game</h1>
-          <input
-              type="text"
-              placeholder="Enter Game ID"
-              value={gameId}
-              onChange={(e) => setGameId(e.target.value)}
-          />
-          <input
-              type="text"
-              placeholder="Enter Your Nickname"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-          />
-          <button onClick={joinGame}>Join Game</button>
-          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      </div>
+  return (
+    <div>
+      <h1>Join a Game</h1>
+      <input
+        type="text"
+        placeholder="Enter Game ID"
+        value={gameId}
+        onChange={(e) => setGameId(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Enter Your Nickname"
+        value={nickname}
+        onChange={(e) => setNickname(e.target.value)}
+      />
+      <button onClick={joinGame}>Join Game</button>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+    </div>
   );
 }

@@ -1,30 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import React, { useEffect } from 'react';
+import { socket } from './socket';
 
-const socket = io('http://localhost:3000');
-
-export function Lobby({ gameId, players, setPlayers, selectedCategories, setSelectedCategories, isCreator, onStartGame }) {
+export function Lobby({ 
+  gameId, 
+  players, // Add default empty array
+  setPlayers, 
+  selectedCategories = [], // Add default empty array
+  setSelectedCategories, 
+  isCreator, 
+  onStartGame 
+}) {
   useEffect(() => {
-    console.log('Lobby mounted for gameId:', gameId);
+    console.log('Lobby mounted for gameId:', gameId, 'Current players:', players);
 
-    socket.on('updateGame', ({ players }) => {
-      console.log('Received updateGame with players:', players);
-      setPlayers(players); // Update players state
-    });
+    function handleUpdateGame(data) {
+      console.log('Received updateGame in Lobby:', data.players);
+      setPlayers(data.players);
+    }
 
-    // Listen for gameData to update categories
-    socket.on('gameData', ({ players, categories }) => {
-      console.log('Received gameData with players and categories:', { players, categories });
-      setPlayers(players); // Update players state
-      setSelectedCategories(categories); // Update categories state
-    });
+    function handleGameData(data) {
+      console.log('Received gameData:', data);
+      setPlayers(data.players);
+      setSelectedCategories(data.categories);
+    }
 
+    // Setup listeners
+    socket.on('updateGame', handleUpdateGame);
+    socket.on('gameData', handleGameData);
+
+    // Cleanup
     return () => {
-      console.log('Lobby unmounted');
-      socket.off('updateGame');
-      socket.off('gameData'); // Clean up gameData listener
+      socket.off('updateGame', handleUpdateGame);
+      socket.off('gameData', handleGameData);
     };
-  }, [gameId]); // Add gameId as a dependency
+  }, [gameId, setPlayers, setSelectedCategories]);
 
   return (
     <div>
@@ -32,13 +41,13 @@ export function Lobby({ gameId, players, setPlayers, selectedCategories, setSele
       <p>Game ID: {gameId}</p>
       <h3>Players in the game:</h3>
       <ul>
-        {players.map((player) => (
+        {(players || []).map((player) => (
           <li key={player.id}>{player.nickname}</li>
         ))}
       </ul>
       <h3>Selected categories:</h3>
       <ul>
-        {selectedCategories.map((category) => (
+        {(selectedCategories || []).map((category) => (
           <li key={category}>{category}</li>
         ))}
       </ul>

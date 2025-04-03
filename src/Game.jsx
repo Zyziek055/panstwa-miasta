@@ -35,21 +35,20 @@ export function Game({ gameId, nickname, selectedCategories }) {
             ) : (  
               <div>
                 <h1>Game Time!</h1>
-                <p>Selected Categories:</p>
-                <ul>
-                    {selectedCategories.map((category) => (
-                        <li key={category}>{category}</li>
-                    ))}
-                </ul>
-                <h2> Random letter: {randomLetter}</h2>
-                <p>Start thinking of words for the selected categories!</p>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  {selectedCategories.map((category) => (
+                    <button key={category} onClick={() => console.log(category)}>
+                      {category}
+                    </button>
+                  ))}
                 </div>
+              </div>
             )}
         </div>
     );
   }
 
-//random styles because otherwise its invisible
+//random styles because otherwise the letters invisible
 const letterScreenStyle = {
   display: 'flex',
   justifyContent: 'center',

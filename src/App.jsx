@@ -11,11 +11,13 @@ function App() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [gameId, setGameId] = useState('');
   const [players, setPlayers] = useState([]);
+  const [isCreator, setIsCreator] = useState(false);
 
-  const startGame = (gameId, categories) => {
+  const startGame = (gameId, categories, isCreator = false) => {
     setGameId(gameId);
     setSelectedCategories(categories);
-    setGameMode('game');
+    setIsCreator(isCreator);
+    setGameMode('waiting');
   };
 
   const joinGame = (gameId, nickname, players, categories) => {
@@ -23,6 +25,15 @@ function App() {
     setNickname(nickname);
     setPlayers(players); // Update players state
     setSelectedCategories(categories); // Update categories state
+    setGameMode('waiting');
+  };
+
+  const handleGameJoined = (gameId, nickname, players, categories) => {
+    console.log('Game joined:', { gameId, nickname, players, categories });
+    setGameId(gameId);
+    setNickname(nickname); // Ustawiamy nickname
+    setPlayers(players);
+    setSelectedCategories(categories);
     setGameMode('waiting');
   };
 
@@ -47,15 +58,14 @@ function App() {
           players={players} // Pass players to Lobby
           setPlayers={setPlayers} // Pass setPlayers to Lobby
           selectedCategories={selectedCategories}
-          isCreator={gameMode === 'create'}
-          onStartGame={startGame}
+          setSelectedCategories={setSelectedCategories}
+          isCreator={isCreator}
+          onStartGame={() => setGameMode('game')}
         />
       )}
       {gameMode === 'join' && (
         <JoinGame
-          onGameJoined={(gameId, nickname, players, categories) =>
-            joinGame(gameId, nickname, players, categories)
-          }
+          onGameJoined={handleGameJoined}
         />
       )}
       {gameMode === 'game' && (

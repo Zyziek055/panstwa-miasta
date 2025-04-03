@@ -27,9 +27,10 @@ io.on('connection', (socket) => {
 
   socket.on('createGame', ({ nickname, categories }) => {
     const gameId = generateGameId();
-
+    const player = { id: socket.id, nickname };
+    
     games[gameId] = {
-      players: [{ id: socket.id, nickname }],
+      players: [player],
       categories,
       randomLetter: '',
       gameState: 'waiting',
@@ -38,8 +39,12 @@ io.on('connection', (socket) => {
     socket.join(gameId);
     console.log(`Game ${gameId} created by ${nickname}`);
 
-    socket.emit('gameCreated', { gameId, categories });
-    io.to(gameId).emit('updateGame', { players: games[gameId].players }); // Emit the initial player list
+    // Send back initial game data
+    socket.emit('gameCreated', { 
+      gameId, 
+      categories,
+      players: [player] // Include the creator in initial players list
+    });
   });
 
   socket.on('startGame', (gameId) => {
@@ -57,19 +62,41 @@ io.on('connection', (socket) => {
   });
 
   socket.on('joinGame', ({ gameId, nickname }) => {
+    console.log('Join game event received:', { gameId, nickname });
+    
     const game = games[gameId];
     if (!game) {
       socket.emit('error', { message: 'Game not found!' });
       return;
     }
-
-    game.players.push({ id: socket.id, nickname });
+  
+    // Add player to room and players list
     socket.join(gameId);
-    console.log(`Player ${nickname} joined game ${gameId}`);
+    game.players.push({ id: socket.id, nickname });
+    
+    console.log('Current players in game:', game.players);
+    
+    // Broadcast to ALL clients in the room, including sender
+    io.in(gameId).emit('updateGame', { 
+      players: game.players
+    });
 
-    // Emit updated player list and categories
-    io.to(gameId).emit('updateGame', { players: game.players });
-    socket.emit('gameData', { players: game.players, categories: game.categories });
+    // Then send complete game data to the joining player
+    socket.emit('gameData', {
+      players: game.players,
+      categories: game.categories
+    });
+  });
+
+  socket.on('joinRoom', ({ gameId }) => {
+    const game = games[gameId];
+    if (game) {
+      socket.join(gameId);
+      // Send current game state to the joining socket
+      socket.emit('updateGame', { 
+        players: game.players 
+      });
+    }
   });
 
   socket.on('disconnect', () => {
