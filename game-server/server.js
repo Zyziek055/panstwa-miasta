@@ -56,8 +56,25 @@ io.on('connection', (socket) => {
     game.players.push({id:socket.id, nickname}); //Add player to the players list
     socket.emit('gameJoined', { gameId, players: game.players, categories: game.categories }); // Emit event to the player who joined
     socket.to(gameId).emit('playerJoined', {players: game.players}); // Notify other players in the game room
-
   })
+
+  socket.on('startGame', ({ gameId }) => {
+    const game = games[gameId]; // Find the game by ID
+
+    if (!game) {
+      socket.emit('error', { message: 'Game not found' });
+      return;
+    }
+
+    if (game.started) {
+      socket.emit('error', { message: 'Game already started' });
+      return;
+    }
+
+    game.started = true; // Mark the game as started
+
+    io.to(gameId).emit('gameStarted', { categories: selectedCategories }); // Notify all players in the game room
+  });
 
 
   socket.on('disconnect', () => {

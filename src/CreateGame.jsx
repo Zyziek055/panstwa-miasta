@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { socket } from './socket';
 
-export function CreateGame({ onStartGame, setPlayers }) {
+export function CreateGame({ onCreateGame, setPlayers }) {
   const categoriesList = [
     'Country',
     'Town',
@@ -49,7 +49,7 @@ export function CreateGame({ onStartGame, setPlayers }) {
       setPlayersState(initialPlayers);
       
       // Call onStartGame to switch to Lobby view
-      onStartGame(gameId, categories, true); // true for isCreator
+      onCreateGame(gameId, categories, true); // true for isCreator
     });
 
     socket.on('error', ({ message }) => {

@@ -8,15 +8,9 @@ export function Game({ gameId, nickname, selectedCategories }) {
   const [showLetterScreen, setShowLetterScreen] = useState(true); // controls when to hide display letter
   //TODO: add functionality to show letter screen for 3 seconds and then hide it
   //TODO: functioanlity
-
     return (
         <div className="game">
            {/* show letter screen while shoLetterScreen is true */}
-          {showLetterScreen ? (
-                <div className="letter-screen" style={letterScreenStyle}>
-                    <h1 style={letterStyle}>{randomLetter}</h1>
-                </div>
-            ) : (  
               <div>
                 <h1>Game Time!</h1>
                 <div style={{ display: 'flex', gap: '10px' }}>
@@ -27,7 +21,6 @@ export function Game({ gameId, nickname, selectedCategories }) {
                   ))}
                 </div>
               </div>
-            )}
         </div>
     );
   }

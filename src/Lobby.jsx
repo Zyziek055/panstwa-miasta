@@ -6,9 +6,8 @@ export function Lobby({
   players, // Add default empty array
   setPlayers, 
   selectedCategories = [], // Add default empty array
-  setSelectedCategories, 
   isCreator, 
-  onStartGame 
+  onStartGame
 }) {
 
   // Create a stable callback function
@@ -17,9 +16,11 @@ export function Lobby({
     setPlayers(players);
   }, [setPlayers]); //this function will be recreated only when setPlayers changes!
 
+
   useEffect(() => {
     // Set up socket listener
     socket.on('playerJoined', handlePlayerJoined);
+    socket.on('gameStarted', onStartGame())
 
     // Cleanup function to remove listeners
     return () => {

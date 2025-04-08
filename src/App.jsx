@@ -16,20 +16,13 @@ function App() {
 
 
   //TODO: understand it lol
-  const startGame = (gameId, categories, isCreator = false) => {
+  const createGame = (gameId, categories, isCreator = false) => {
     setGameId(gameId);
     setSelectedCategories(categories);
     setIsCreator(isCreator);
     setGameMode('waiting');
   };
 
-  const joinGame = (gameId, nickname, players, categories) => {
-    setGameId(gameId);
-    setNickname(nickname);
-    setPlayers(players); // Update players state
-    setSelectedCategories(categories); // Update categories state
-    setGameMode('waiting');
-  };
 
   const handleGameJoined = (gameId, nickname, players, categories) => {
     console.log('Game joined:', { gameId, nickname, players, categories });
@@ -58,7 +51,7 @@ function App() {
       )}
       {gameMode === 'create' && (
         <CreateGame
-          onStartGame={startGame}
+          onCreateGame={createGame}
           setPlayers={setPlayers} // Pass setPlayers to CreateGame
         />
       )}
