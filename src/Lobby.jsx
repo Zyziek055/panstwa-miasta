@@ -15,7 +15,7 @@ export function Lobby({
   const handlePlayerJoined = useCallback(({ players }) => {
     console.log('Received playerJoined event with players:', players);
     setPlayers(players);
-  }, [setPlayers]);
+  }, [setPlayers]); //this function will be recreated only when setPlayers changes!
 
   useEffect(() => {
     // Set up socket listener
