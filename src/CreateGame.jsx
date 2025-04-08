@@ -30,11 +30,32 @@ export function CreateGame({ onStartGame, setPlayers }) {
         return [...prev, category];
       }
     });
-  }
-  //TODO : Add functionality
+  };
   
-  ;
+  const createGame = () => {
+    if (!nickname) {
+      alert('Please enter your nickname!');
+      return;
+    }
 
+    console.log('Creating game with:', { nickname, categories: selectedCategories });
+    
+    socket.emit('createGame', { nickname, categories: selectedCategories }); //send info to the server about the game creation
+    
+    socket.once('gameCreated', ({ gameId, categories }) => {
+      console.log('Game created:', { gameId, categories });
+      const initialPlayers = [{ id: socket.id, nickname }];
+      setPlayers(initialPlayers);
+      setPlayersState(initialPlayers);
+      
+      // Call onStartGame to switch to Lobby view
+      onStartGame(gameId, categories, true); // true for isCreator
+    });
+
+    socket.on('error', ({ message }) => {
+      alert(message);
+    });
+  };
   return (
     <div>
       <h1>Create a New Game</h1>

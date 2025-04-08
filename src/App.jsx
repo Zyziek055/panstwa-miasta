@@ -4,6 +4,7 @@ import { JoinGame } from './JoinGame';
 import { Game } from './Game';
 import { Lobby } from './Lobby'; // Import Lobby component
 import './App.css';
+import { socket } from './socket';
 
 function App() {
   const [gameMode, setGameMode] = useState('');
@@ -44,8 +45,15 @@ function App() {
       <h1>WILKOMMEN</h1>
       {gameMode === '' && (
         <div>
-          <button onClick={() => setGameMode('create')}>Create Game</button>
-          <button onClick={() => setGameMode('join')}>Join Game</button>
+          <button onClick={() => {
+            setGameMode('create')
+            console.log("Game mode changed to 'create'")}
+          }>Create Game</button>
+          <button onClick={() => {
+            setGameMode('join');
+            console.log("Game mode changed to 'join'")
+              }
+            }>Join Game</button>
         </div>
       )}
       {gameMode === 'create' && (
@@ -68,6 +76,7 @@ function App() {
       {gameMode === 'join' && (
         <JoinGame
           onGameJoined={handleGameJoined}
+          socket={socket} // Pass socket to JoinGame 
         />
       )}
       {gameMode === 'game' && (

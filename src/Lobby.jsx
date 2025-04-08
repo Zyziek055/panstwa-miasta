@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { socket } from './socket';
 
 export function Lobby({ 
@@ -10,6 +10,23 @@ export function Lobby({
   isCreator, 
   onStartGame 
 }) {
+
+  // Create a stable callback function
+  const handlePlayerJoined = useCallback(({ players }) => {
+    console.log('Received playerJoined event with players:', players);
+    setPlayers(players);
+  }, [setPlayers]);
+
+  useEffect(() => {
+    // Set up socket listener
+    socket.on('playerJoined', handlePlayerJoined);
+
+    // Cleanup function to remove listeners
+    return () => {
+      socket.off('playerJoined', handlePlayerJoined);
+      socket.off('updateGame', handlePlayerJoined);
+    };
+  }, [gameId, handlePlayerJoined]);
 
   //TODO: add functionalities etc
 

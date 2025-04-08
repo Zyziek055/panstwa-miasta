@@ -9,12 +9,6 @@ const io = new Server(server, {
   },
 });
 
-// Function to generate a random letter
-const generateRandomLetter = () => {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  return alphabet[Math.floor(Math.random() * alphabet.length)];
-};
-
 // Function to generate a unique game ID
 const generateGameId = () => {
   return `${Math.floor(1000 + Math.random() * 9000)}`;
@@ -23,10 +17,51 @@ const generateGameId = () => {
 const games = {}; // Store game data
 
 io.on('connection', (socket) => {
-  
+  console.log('A user connected:', socket.id);
+
+  socket.on('createGame', ({ nickname, categories }) => {
+    const gameId = generateGameId(); // Generate a unique game ID
+    const initialPlayers = [{ id: socket.id, nickname }]; // Initialize palyers list with the creator
+
+    // Store game data
+    games[gameId] = {
+      id: gameId,
+      players: initialPlayers,
+      categories: categories || [],
+      started: false,
+    };
+
+    socket.join(gameId); // Join the game room 
+    
+
+    socket.emit('gameCreated', { gameId, categories }); //Emit game creation event to everyone in the lobby
+    console.log('OK', { gameId, categories });
+  });
+
+  socket.on('joinGame', ({ gameId, nickname }) => {
+    const game = games[gameId]; // Find the game by ID
+
+    if (!game) {
+      socket.emit('error', { message: 'Game not found' });
+      return;
+    }
+
+    if (game.started) {
+      socket.emit('error', { message: 'Game already started' });
+      return;
+    }
+
+    console.log('game found')
+
+    game.players.push({id:socket.id, nickname}); //Add player to the players list
+    socket.emit('gameJoined', { gameId, players: game.players, categories: game.categories }); // Emit event to the player who joined
+    socket.to(gameId).emit('playerJoined', {players: game.players}); // Notify other players in the game room
+
+  })
+
 
   socket.on('disconnect', () => {
-
+     
     //TODO: add server events
 
     console.log('A user disconnected:', socket.id);

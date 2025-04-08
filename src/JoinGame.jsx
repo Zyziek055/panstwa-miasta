@@ -1,14 +1,36 @@
 import React, { useState } from 'react';
 import { io } from 'socket.io-client';
 
-const socket  = io('http://localhost:3000'); // Connect to server
 
-export function JoinGame({ onGameJoined }) {
+export function JoinGame({ onGameJoined, socket }) {
   const [gameId, setGameId] = useState('');
   const [nickname, setNickname] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
  //TODO: handle join game
+
+ const joinGame = () => {
+  if (!nickname) {
+    alert('Please enter your nickname!');
+    return;
+  }
+
+  if (!gameId) {
+    alert('Please enter your nickname!');
+    return;
+  }
+  
+  socket.emit('joinGame', {gameId, nickname}); //Send info to the server thgat player wants to join the game
+
+  socket.on('gameJoined', ({ gameId, players, categories }) => {
+    console.log('Game joined:', { gameId, players, categories });
+    onGameJoined(gameId, nickname, players, categories); // Call the function to update the game state in App.jsx
+  });
+ }
+ 
+
+
+
 
   return (
     <div>
