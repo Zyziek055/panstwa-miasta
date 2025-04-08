@@ -8,29 +8,7 @@ export function JoinGame({ onGameJoined }) {
   const [nickname, setNickname] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const joinGame = () => {
-    if (!gameId || !nickname) {
-      setErrorMessage('Please enter both Game ID and Nickname!');
-      return;
-    }
-
-    console.log('Attempting to join game:', { gameId, nickname });
-    
-    // Emit joinGame event to server
-    socket.emit('joinGame', { gameId, nickname });
-
-    // Listen for gameData response
-    socket.once('gameData', ({ players, categories }) => {
-      console.log('Received game data:', { players, categories });
-      onGameJoined(gameId, nickname, players, categories); // Dodajemy nickname
-    });
-
-    // Handle potential errors
-    socket.once('error', ({ message }) => {
-      console.error('Error joining game:', message);
-      setErrorMessage(message);
-    });
-  };
+ //TODO: handle join game
 
   return (
     <div>

@@ -30,49 +30,10 @@ export function CreateGame({ onStartGame, setPlayers }) {
         return [...prev, category];
       }
     });
-  };
-
-  const createGame = () => {
-    if (!nickname) {
-      alert('Please enter your nickname!');
-      return;
-    }
-
-    socket.emit('createGame', { nickname, categories: selectedCategories });
-
-    socket.once('gameCreated', ({ gameId, categories, players }) => {
-      console.log(`Game ${gameId} created by ${nickname}`, categories, players);
-      setPlayers(players); // Update players list immediately
-      onStartGame(gameId, categories, true);
-    });
-
-    socket.on('error', ({ message }) => {
-      alert(message);
-    });
-  };
-
-  useEffect(() => {
-    if (gameCreated) {
-      socket.on('updateGame', ({ players }) => {
-        console.log('Updated players:', players);
-        setPlayers(players);
-        setPlayersState(players);
-      });
-    }
-
-    socket.on('gameData', ({ players, categories }) => {
-      console.log('Game data received:', { players, categories });
-      setPlayers(players);
-      setPlayersState(players);
-      setSelectedCategories(categories);
-      setGameCreated(true);
-    });
-
-    return () => {
-      socket.off('updateGame');
-      socket.off('gameData');
-    };
-  }, [gameCreated]);
+  }
+  //TODO : Add functionality
+  
+  ;
 
   return (
     <div>

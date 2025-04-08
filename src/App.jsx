@@ -13,6 +13,8 @@ function App() {
   const [players, setPlayers] = useState([]);
   const [isCreator, setIsCreator] = useState(false);
 
+
+  //TODO: understand it lol
   const startGame = (gameId, categories, isCreator = false) => {
     setGameId(gameId);
     setSelectedCategories(categories);

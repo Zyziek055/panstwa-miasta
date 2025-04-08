@@ -7,23 +7,8 @@ const socket = io('http://localhost:3000'); // Connect to the server
 export function Game({ gameId, nickname, selectedCategories }) {
   const [randomLetter, setRandomLetter] = useState('');
   const [showLetterScreen, setShowLetterScreen] = useState(true); // controls when to hide display letter
-
-
-  //draw a letter
-  useEffect(() => {
-    
-    socket.emit('startGame', gameId); // Emit the event to start the game
-
-    socket.on('gameStarted', ({ randomLetter }) => {
-      setRandomLetter(randomLetter); // Set the random letter received from the server
-      console.log('Game started with letter:', randomLetter);
-      setTimeout(() => setShowLetterScreen(false), 5000);
-    });
-
-        return () => socket.disconnect(); 
-    }, [gameId, nickname]);
-
-
+  //TODO: add functionality to show letter screen for 3 seconds and then hide it
+  //TODO: functioanlity
 
     return (
         <div className="game">

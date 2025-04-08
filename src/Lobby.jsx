@@ -10,30 +10,8 @@ export function Lobby({
   isCreator, 
   onStartGame 
 }) {
-  useEffect(() => {
-    console.log('Lobby mounted for gameId:', gameId, 'Current players:', players);
 
-    function handleUpdateGame(data) {
-      console.log('Received updateGame in Lobby:', data.players);
-      setPlayers(data.players);
-    }
-
-    function handleGameData(data) {
-      console.log('Received gameData:', data);
-      setPlayers(data.players);
-      setSelectedCategories(data.categories);
-    }
-
-    // Setup listeners
-    socket.on('updateGame', handleUpdateGame);
-    socket.on('gameData', handleGameData);
-
-    // Cleanup
-    return () => {
-      socket.off('updateGame', handleUpdateGame);
-      socket.off('gameData', handleGameData);
-    };
-  }, [gameId, setPlayers, setSelectedCategories]);
+  //TODO: add functionalities etc
 
   return (
     <div>
