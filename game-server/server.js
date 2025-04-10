@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
     socket.join(gameId); // Join the game room 
     
 
-    socket.emit('gameCreated', { gameId, categories }); //Emit game creation event to everyone in the lobby
+    socket.emit('gameCreated', { gameId, categories,players: initialPlayers }); //Emit game creation event to everyone in the lobby
     console.log('OK', { gameId, categories });
   });
 
@@ -50,8 +50,8 @@ io.on('connection', (socket) => {
       socket.emit('error', { message: 'Game already started' });
       return;
     }
-
-    console.log('game found')
+    console.log('joining room')
+    socket.join(gameId); // Join the game room
 
     game.players.push({id:socket.id, nickname}); //Add player to the players list
     socket.emit('gameJoined', { gameId, players: game.players, categories: game.categories }); // Emit event to the player who joined
@@ -73,7 +73,7 @@ io.on('connection', (socket) => {
 
     game.started = true; // Mark the game as started
 
-    io.to(gameId).emit('gameStarted', { categories: selectedCategories }); // Notify all players in the game room
+    io.to(gameId).emit('gameStarted', { categories: game.selectedCategories }); // Notify all players in the game room
   });
 
 

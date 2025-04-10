@@ -10,12 +10,20 @@ export function Lobby({
   onStartGame
 }) {
 
+  const handleStartGameClick = () => {
+    socket.emit('startGame', { gameId });
+} ;
+  
   // Create a stable callback function
   const handlePlayerJoined = useCallback(({ players }) => {
     console.log('Received playerJoined event with players:', players);
     setPlayers(players);
   }, [setPlayers]); //this function will be recreated only when setPlayers changes!
 
+  const handleGameStarted = useCallback(({ categories }) => {
+    console.log('Game started with categories:', categories);
+    // Handle game start logic here, e.g., redirect to the game screen
+  })
 
   //Use effect is a function that runs when the component renders 
   //For example we set socket listeres there
@@ -29,7 +37,7 @@ export function Lobby({
       socket.off('playerJoined', handlePlayerJoined);
       socket.off('updateGame', handlePlayerJoined);
     };
-  }, [gameId, handlePlayerJoined]);
+  }, [gameId, handlePlayerJoined, onStartGame]);
 
   //TODO: add functionalities etc
 
@@ -50,7 +58,7 @@ export function Lobby({
         ))}
       </ul>
       {isCreator && (
-        <button onClick={onStartGame}>Start Game</button>
+        <button onClick={handleStartGameClick}>Start Game</button>
       )}
     </div>
   );
