@@ -17,10 +17,12 @@ export function Lobby({
   }, [setPlayers]); //this function will be recreated only when setPlayers changes!
 
 
+  //Use effect is a function that runs when the component renders 
+  //For example we set socket listeres there
   useEffect(() => {
     // Set up socket listener
     socket.on('playerJoined', handlePlayerJoined);
-    socket.on('gameStarted', onStartGame())
+    socket.on('gameStarted', onStartGame)
 
     // Cleanup function to remove listeners
     return () => {
