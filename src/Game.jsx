@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import { socket } from './socket';
 
 
 //create game component
-export function Game({ gameId, nickname, selectedCategories }) {
-  const [randomLetter, setRandomLetter] = useState('');
-  const [showLetterScreen, setShowLetterScreen] = useState(true); // controls when to hide display letter
+export function Game({ gameId, nickname, selectedCategories, randomLetter}) {
   const [selectedCategory, setSelectedCategory] = useState(selectedCategories[0]);
   const [answers, setAnswers] = useState(
     selectedCategories.reduce((acc, category) => {
@@ -13,11 +11,19 @@ export function Game({ gameId, nickname, selectedCategories }) {
       return acc;
     }, {})
   );
-
+  const [submitted, setSubmitted] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(null);
   
+  useEffect(() => {
+    // Tylko jeden listener do odliczania
+    socket.on('startCountdown', ({ timeLeft }) => {
+      setTimeLeft(timeLeft);
+    });
 
-  //TODO: add functionality to show letter screen for 3 seconds and then hide it
-  //TODO: functioanlity
+    return () => socket.off('startCountdown');
+  }, []);
+
+
   const handleAnswerChange = (e, category) => {
     setAnswers(prev => ({
       ...prev,
@@ -32,7 +38,7 @@ export function Game({ gameId, nickname, selectedCategories }) {
     return (
       <div className="game">
           <h1>Game started!</h1>
-          <p>Random letter: {randomLetter}</p>
+          <p>Letter: {randomLetter}</p>
         <div>
           <div style={{ display: 'flex', gap: '10px' }}>
             {selectedCategories.map((category) => (
@@ -66,12 +72,26 @@ export function Game({ gameId, nickname, selectedCategories }) {
           )}
         </div>
 
-        <button>
-          Submit answers
-        </button>
-      </div>
-    );
-  }
+
+      <button
+        onClick={() => {
+          socket.emit('submitAnswers', { gameId, answers });
+          setSubmitted(true);
+        }}
+        disabled={submitted}
+        style={{
+          backgroundColor: submitted ? '#cccccc' : '#000000',
+          color: 'white',
+          cursor: submitted ? 'default' : 'pointer'
+        }}
+      >
+        {submitted ? 'Answers Submitted' : 'Submit Answers'}
+      </button>
+
+      {timeLeft > 0 && <div>Time left: {timeLeft} seconds</div>}
+    </div>
+  );
+}
 
 //random styles because otherwise the letters invisible
 const letterScreenStyle = {

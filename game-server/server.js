@@ -84,6 +84,24 @@ io.on('connection', (socket) => {
     io.to(gameId).emit('gameStarted', { categories: game.selectedCategories, randomLetter}); // Notify all players in the game room
   });
 
+  socket.on('submitAnswers', ({ gameId, answers }) => {
+    let timeLeft = 10;
+    
+    const countDown = setInterval(() => {
+      io.to(gameId).emit('startCountdown', { timeLeft });
+      timeLeft--;
+  
+      if (timeLeft < 0) {
+        clearInterval(countDown);
+        io.to(gameId).emit('gameEnded');
+      }
+    }, 1000);
+  });
+
+  socket.on('timeUp', ({ gameId }) => {
+    io.to(gameId).emit('gameEnded');
+    delete games[gameId];
+  });
 
   socket.on('disconnect', () => {
      
