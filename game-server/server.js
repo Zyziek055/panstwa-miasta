@@ -81,7 +81,7 @@ io.on('connection', (socket) => {
     const randomLetter = generateLetter();
     game.started = true; // Mark the game as started
 
-    io.to(gameId).emit('gameStarted', { categories: game.selectedCategories }, randomLetter); // Notify all players in the game room
+    io.to(gameId).emit('gameStarted', { categories: game.selectedCategories, randomLetter}); // Notify all players in the game room
   });
 
 

@@ -13,6 +13,7 @@ function App() {
   const [gameId, setGameId] = useState('');
   const [players, setPlayers] = useState([]);
   const [isCreator, setIsCreator] = useState(false);
+  const [randonmLetter, setRandomLetter] = useState(''); 
 
 
   //TODO: understand it lol
@@ -32,6 +33,12 @@ function App() {
     setSelectedCategories(categories);
     setGameMode('waiting');
   };
+
+  const onGameStarted = ({randomLetter}) => {
+    console.log('Game started with random letter:', randomLetter);
+    setRandomLetter(randomLetter);
+    setGameMode('game');
+  }
 
   return (
     <div>
@@ -63,7 +70,7 @@ function App() {
           selectedCategories={selectedCategories}
           setSelectedCategories={setSelectedCategories}
           isCreator={isCreator}
-          onStartGame={() => setGameMode('game')}
+          onStartGame={handleGameStarted()}
         />
       )}
       {gameMode === 'join' && (
