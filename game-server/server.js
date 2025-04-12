@@ -14,6 +14,12 @@ const generateGameId = () => {
   return `${Math.floor(1000 + Math.random() * 9000)}`;
 };
 
+const generateLetter = () => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWZ";
+  const randomIndex = Math.floor(Math.random() * letters.length);
+  return litery[randomIndex];
+}
+
 const games = {}; // Store game data
 
 io.on('connection', (socket) => {
@@ -71,6 +77,8 @@ io.on('connection', (socket) => {
       return;
     }
 
+
+    const randomLetter = generateLetter();
     game.started = true; // Mark the game as started
 
     io.to(gameId).emit('gameStarted', { categories: game.selectedCategories }); // Notify all players in the game room
