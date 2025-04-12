@@ -13,7 +13,7 @@ function App() {
   const [gameId, setGameId] = useState('');
   const [players, setPlayers] = useState([]);
   const [isCreator, setIsCreator] = useState(false);
-  const [randonmLetter, setRandomLetter] = useState(''); 
+  const [randomLetter, setRandomLetter] = useState(''); 
 
 
   //TODO: understand it lol
@@ -42,9 +42,9 @@ function App() {
 
   return (
     <div>
-      <h1>WILKOMMEN</h1>
       {gameMode === '' && (
         <div>
+          <h1>WILKOMMEN</h1>
           <button onClick={() => {
             setGameMode('create')
             console.log("Game mode changed to 'create'")}
@@ -70,7 +70,7 @@ function App() {
           selectedCategories={selectedCategories}
           setSelectedCategories={setSelectedCategories}
           isCreator={isCreator}
-          onStartGame={handleGameStarted()}
+          onStartGame={onGameStarted}
         />
       )}
       {gameMode === 'join' && (
@@ -80,7 +80,7 @@ function App() {
         />
       )}
       {gameMode === 'game' && (
-        <Game gameId={gameId} nickname={nickname} selectedCategories={selectedCategories} />
+        <Game gameId={gameId} nickname={nickname} selectedCategories={selectedCategories} randomLetter={randomLetter} />
       )}
     </div>
   );

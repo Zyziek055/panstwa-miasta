@@ -31,6 +31,8 @@ export function Game({ gameId, nickname, selectedCategories }) {
 
     return (
       <div className="game">
+          <h1>Game started!</h1>
+          <p>Random letter: {randomLetter}</p>
         <div>
           <div style={{ display: 'flex', gap: '10px' }}>
             {selectedCategories.map((category) => (

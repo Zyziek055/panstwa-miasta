@@ -17,7 +17,7 @@ const generateGameId = () => {
 const generateLetter = () => {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWZ";
   const randomIndex = Math.floor(Math.random() * letters.length);
-  return litery[randomIndex];
+  return letters[randomIndex];
 }
 
 const games = {}; // Store game data
