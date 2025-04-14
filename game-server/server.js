@@ -20,8 +20,7 @@ const generateLetter = () => {
   return letters[randomIndex];
 }
 
-const games = {}; // Store game data
-
+const games = {}; // Store game dat
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
@@ -97,15 +96,26 @@ io.on('connection', (socket) => {
     }, 1000);
   });
 
-  socket.on('scoresSubitted', ({ gameId, scores})=> {
+  socket.on('scoreSubmit', ({ gameId, scores})=> {
     const game = games[gameId];
     if (!game) return;
-
     if (!game.scores) game.scores = {};
-    game.scores = {...game.scores, ...scores};
+    game.submittedPoints.add(socket.id); // Add player to the list of players who submitted points
 
-    const newLetter = generateLetter();
-    io.to(gameId).emit('nextRound', {letter: newLetter});
+    //Sum up scores for ea
+    Object.keys(scores).forEach(category => {
+      // Convert score to number and add to existing (or 0 if no previous score)
+      game.scores[category] = (game.scores[category] || 0) + Number(scores[category]);
+    });
+    
+    //Check if everyone in the lobby submited their points
+    if (game.submittedPoints.size === game.players.length) {
+      game.submittedPoints = newSet();
+      const newLetter = generateLetter();
+      io.to(gameId).emit('nextRound', {letter: newLetter});
+    }
+
+
   });
 
   socket.on('disconnect', () => {

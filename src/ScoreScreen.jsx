@@ -6,16 +6,20 @@ export function ScoreScreen({ players, gameId, answers}) {
   const [submitted, setSubmitted] = useState(false);
 
   const handleScoreChange = (playerId, category, score) => {
-
-    setScores((prevscores) => ({
-        ...prevscores,
+    setScores(prevScores => {
+      // Inicjalizuj obiekt dla gracza jeśli nie istnieje
+      const playerScores = prevScores[playerId] || {};
+      
+      const newScores = {
+        ...prevScores,
         [playerId]: {
-          ...prevscores[playerId],
-          [category]: score,
+          ...playerScores,
+          [category]: Number(score) // Konwertuj na liczbę
         }
-    }))
-  console.log('Scores updated:', scores);
-};
+      };
+      return newScores;
+    });
+  };
   
   return (
     <div className='score-screen'>
