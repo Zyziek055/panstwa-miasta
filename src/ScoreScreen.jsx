@@ -6,17 +6,19 @@ export function ScoreScreen({ players, gameId, answers}) {
   const [submitted, setSubmitted] = useState(false);
 
   const handleScoreChange = (playerId, category, score) => {
+
     setScores((prevscores) => ({
-      ...prevscores,
-      [playerId]: {
-        ...prevscores[playerId],
-        [category]: score,
-      }
-  }))
+        ...prevscores,
+        [playerId]: {
+          ...prevscores[playerId],
+          [category]: score,
+        }
+    }))
+  console.log('Scores updated:', scores);
 };
   
   return (
-    <div className='score-scree'>
+    <div className='score-screen'>
       <div className="players-answers">
           <div className="player-section">
             <h3>Your Answers</h3>
@@ -38,7 +40,7 @@ export function ScoreScreen({ players, gameId, answers}) {
 
       <button
         onClick={() => {
-          socket.emit('scoreSubmit', { gameId });
+          socket.emit('scoreSubmit', { gameId, scores});
           setSubmitted(true);
         }}
         disabled={submitted}
