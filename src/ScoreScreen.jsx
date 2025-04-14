@@ -7,7 +7,6 @@ export function ScoreScreen({ players, gameId, answers}) {
 
   return (
     <div className='score-scree'>
-      <h2>Score Round</h2>
       <div className="players-answers">
           <div className="player-section">
             <h3>Your Answers</h3>
