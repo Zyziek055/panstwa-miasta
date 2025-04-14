@@ -5,6 +5,16 @@ export function ScoreScreen({ players, gameId, answers}) {
   const [scores, setScores] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
+  const handleScoreChange = (playerId, category, score) => {
+    setScores((prevscores) => ({
+      ...prevscores,
+      [playerId]: {
+        ...prevscores[playerId],
+        [category]: score,
+      }
+  }))
+};
+  
   return (
     <div className='score-scree'>
       <div className="players-answers">
