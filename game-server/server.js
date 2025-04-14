@@ -84,23 +84,28 @@ io.on('connection', (socket) => {
     io.to(gameId).emit('gameStarted', { categories: game.selectedCategories, randomLetter}); // Notify all players in the game room
   });
 
-  socket.on('submitAnswers', ({ gameId, answers }) => {
+  socket.on('submitAnswers', ({ gameId }) => {
     let timeLeft = 10;
-    
     const countDown = setInterval(() => {
       io.to(gameId).emit('startCountdown', { timeLeft });
       timeLeft--;
   
       if (timeLeft < 0) {
         clearInterval(countDown);
-        io.to(gameId).emit('gameEnded');
+        io.to(gameId).emit('roundEnded');
       }
     }, 1000);
   });
 
-  socket.on('timeUp', ({ gameId }) => {
-    io.to(gameId).emit('gameEnded');
-    delete games[gameId];
+  socket.on('scoresSubitted', ({ gameId, scores})=> {
+    const game = games[gameId];
+    if (!game) return;
+
+    if (!game.scores) game.scores = {};
+    game.scores = {...game.scores, ...scores};
+
+    const newLetter = generateLetter();
+    io.to(gameId).emit('nextRound', {letter: newLetter});
   });
 
   socket.on('disconnect', () => {

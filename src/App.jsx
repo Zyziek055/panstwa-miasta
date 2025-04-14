@@ -80,7 +80,7 @@ function App() {
         />
       )}
       {gameMode === 'game' && (
-        <Game gameId={gameId} nickname={nickname} selectedCategories={selectedCategories} randomLetter={randomLetter} />
+        <Game gameId={gameId} nickname={nickname} selectedCategories={selectedCategories} randomLetter={randomLetter} players={players} />
       )}
     </div>
   );

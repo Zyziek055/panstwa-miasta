@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { socket } from './socket';
+import { ScoreScreen } from './ScoreScreen';
 
 
 //create game component
-export function Game({ gameId, nickname, selectedCategories, randomLetter}) {
+export function Game({ gameId, nickname, selectedCategories, randomLetter, players}) {
   const [selectedCategory, setSelectedCategory] = useState(selectedCategories[0]);
   const [answers, setAnswers] = useState(
     selectedCategories.reduce((acc, category) => {
@@ -13,6 +14,8 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter}) {
   );
   const [submitted, setSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
+  const [gameState, setGameState] = useState('game'); // 'game' or 'score'
+  const [allAnswers, setAllAnswers] = useState({}); // Store all answers from players
   
   useEffect(() => {
     // Tylko jeden listener do odliczania
@@ -20,8 +23,28 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter}) {
       setTimeLeft(timeLeft);
     });
 
-    return () => socket.off('startCountdown');
-  }, []);
+    socket.on('roundEnded', () => {
+      console.log('round ended, this players answers are: ', answers);
+      setGameState('score'); // Switch to score screen
+    });
+
+    socket.on('nextRound', () => {
+      setAnswers(
+        selectedCategories.reduce((acc, category) => {
+          acc[category] = '';
+          return acc;
+        }, {})
+      );
+      setSubmitted(false);
+      setGameState('game'); // Switch back to game screen
+    });
+
+    return () => {
+      socket.off('startCountdown');
+      socket.off('roundEnded');
+      socket.off('nextRound');
+    }
+  }, [answers]);
 
 
   const handleAnswerChange = (e, category) => {
@@ -35,7 +58,13 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter}) {
     setSelectedCategory(category);
   };
 
-    return (
+  if (gameState === 'score') {
+    return <ScoreScreen 
+      gameId={gameId} 
+      players={players} 
+      answers={answers} 
+    />;
+  } else return (
       <div className="game">
           <h1>Game started!</h1>
           <p>Letter: {randomLetter}</p>
@@ -75,7 +104,7 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter}) {
 
       <button
         onClick={() => {
-          socket.emit('submitAnswers', { gameId, answers });
+          socket.emit('submitAnswers', { gameId });
           setSubmitted(true);
         }}
         disabled={submitted}
@@ -92,23 +121,3 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter}) {
     </div>
   );
 }
-
-//random styles because otherwise the letters invisible
-const letterScreenStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',
-  backgroundColor: '#000',
-  color: '#fff',
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100%',
-  zIndex: 1000,
-};
-
-const letterStyle = {
-  fontSize: '10rem',
-  fontWeight: 'bold',
-};
