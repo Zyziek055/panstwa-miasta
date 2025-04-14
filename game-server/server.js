@@ -24,7 +24,7 @@ const games = {}; // Store game dat
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
-  socket.on('createGame', ({ nickname, categories }) => {
+  socket.on('createGame', ({ nickname, categories, rounds}) => {
     const gameId = generateGameId(); // Generate a unique game ID
     const initialPlayers = [{ id: socket.id, nickname }]; // Initialize palyers list with the creator
 
@@ -34,6 +34,7 @@ io.on('connection', (socket) => {
       players: initialPlayers,
       categories: categories || [],
       started: false,
+      rounds: rounds
     };
 
     socket.join(gameId); // Join the game room 

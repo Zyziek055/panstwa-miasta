@@ -19,6 +19,7 @@ export function CreateGame({ onCreateGame, setPlayers }) {
   const [gameId, setGameId] = useState('');
   const [isCreator, setIsCreator] = useState(false);
   const [players, setPlayersState] = useState([]);
+  const [rounds, setRounds] = useState(1); // Default value for rounds
 
   const toggleCategory = (category) => {
     if (defaultCategories.includes(category)) return;
@@ -40,7 +41,7 @@ export function CreateGame({ onCreateGame, setPlayers }) {
 
     console.log('Creating game with:', { nickname, categories: selectedCategories });
     
-    socket.emit('createGame', { nickname, categories: selectedCategories }); //send info to the server about the game creation
+    socket.emit('createGame', { nickname, categories: selectedCategories, rounds}); //send info to the server about the game creation
     
     socket.once('gameCreated', ({ gameId, categories }) => {
       console.log('Game created:', { gameId, categories });
@@ -83,6 +84,21 @@ export function CreateGame({ onCreateGame, setPlayers }) {
           <label htmlFor={category}>{category}</label>
         </div>
       ))}
+      <div>Rounds:</div>
+        <div style={{ margin: '20px 0' }}>
+        <label>Number of Rounds: </label>
+          <select 
+            id="rounds"
+            value={rounds}
+            onChange={(e) => setRounds(Number(e.target.value))}
+            style={{ marginLeft: '10px' }}
+          >
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
       <button onClick={createGame}>Create Game</button>
     </div>
   );
