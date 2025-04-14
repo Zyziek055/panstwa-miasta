@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { CreateGame } from './CreateGame';
 import { JoinGame } from './JoinGame';
 import { Game } from './Game';
-import { Lobby } from './Lobby'; // Import Lobby component
+import { Lobby } from './Lobby'; 
+
 import './App.css';
 import { socket } from './socket';
 
@@ -14,6 +15,8 @@ function App() {
   const [players, setPlayers] = useState([]);
   const [isCreator, setIsCreator] = useState(false);
   const [randomLetter, setRandomLetter] = useState(''); 
+  const [finalScores, setFinalScores] = useState({}); // Store final scores for leaderboard
+
 
 
   //TODO: understand it lol
@@ -38,6 +41,11 @@ function App() {
     console.log('Game started with random letter:', randomLetter);
     setRandomLetter(randomLetter);
     setGameMode('game');
+  }
+
+  const onGameEnded = (scores) => {
+    setFinalScores(scores);
+    setGameMode('leaderboard');
   }
 
   return (
@@ -80,7 +88,12 @@ function App() {
         />
       )}
       {gameMode === 'game' && (
-        <Game gameId={gameId} nickname={nickname} selectedCategories={selectedCategories} randomLetter={randomLetter} players={players} />
+        <Game gameId={gameId} nickname={nickname} selectedCategories={selectedCategories} randomLetter={randomLetter} players={players} onGameEnded={onGameEnded}/>
+      )}
+      {gameMode === 'leaderboard' && (
+        <div>
+          END
+        </div>
       )}
     </div>
   );

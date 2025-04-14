@@ -93,6 +93,7 @@ export function CreateGame({ onCreateGame, setPlayers }) {
             onChange={(e) => setRounds(Number(e.target.value))}
             style={{ marginLeft: '10px' }}
           >
+            <option value="1">1</option>  
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>

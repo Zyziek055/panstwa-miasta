@@ -4,7 +4,7 @@ import { ScoreScreen } from './ScoreScreen';
 
 
 //create game component
-export function Game({ gameId, nickname, selectedCategories, randomLetter, players}) {
+export function Game({ gameId, nickname, selectedCategories, randomLetter, players, onGameEnded }) {
   const [selectedCategory, setSelectedCategory] = useState(selectedCategories[0]);
   const [answers, setAnswers] = useState(
     selectedCategories.reduce((acc, category) => {
@@ -39,11 +39,18 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter, playe
       setGameState('game'); // Switch back to game screen
     });
 
+    socket.on('gameEnded', ({scores}) => {
+      onGameEnded(scores); // Call the function passed from App component
+      console.log('Game ended, final scores:', scores);
+    });
+
     return () => {
       socket.off('startCountdown');
       socket.off('roundEnded');
       socket.off('nextRound');
     }
+
+
   }, [answers]);
 
 

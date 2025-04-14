@@ -34,7 +34,8 @@ io.on('connection', (socket) => {
       players: initialPlayers,
       categories: categories || [],
       started: false,
-      rounds: rounds
+      roundsLeft: rounds,
+      submittedPoints: new Set(), // Track players who submitted points every round
     };
 
     socket.join(gameId); // Join the game room 
@@ -111,12 +112,15 @@ io.on('connection', (socket) => {
     
     //Check if everyone in the lobby submited their points
     if (game.submittedPoints.size === game.players.length) {
-      game.submittedPoints = newSet();
+      game.roundsLeft -= 1 
+      if (game.roundsLeft === 0) {
+        io.to(gameId).emit('gameEnded', { scores: game.scores });
+      };
+
+      game.submittedPoints = new Set(); // Reset the set for the next round
       const newLetter = generateLetter();
       io.to(gameId).emit('nextRound', {letter: newLetter});
     }
-
-
   });
 
   socket.on('disconnect', () => {
