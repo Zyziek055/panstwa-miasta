@@ -68,7 +68,7 @@ export function CreateGame({ onCreateGame, setPlayers }) {
       />
       <h3>Select Categories:</h3>
       {categoriesList.map((category) => (
-        <div key={category}>
+        <label key={category}>
           <input
             type="checkbox"
             id={category}
@@ -81,16 +81,16 @@ export function CreateGame({ onCreateGame, setPlayers }) {
               )
             }
           />
-          <label htmlFor={category}>{category}</label>
-        </div>
+          {category}
+        </label>
       ))}
-        <div style={{ margin: '20px 0' }}>
-        <label>Rounds: </label>
+        <div className="rounds-select-wrapper">
+          <label htmlFor="rounds" className="rounds-label">Rounds:</label>
           <select 
             id="rounds"
             value={rounds}
             onChange={(e) => setRounds(Number(e.target.value))}
-            style={{ marginLeft: '10px' }}
+            className="rounds-select"
           >
             <option value="1">1</option>  
             <option value="2">2</option>

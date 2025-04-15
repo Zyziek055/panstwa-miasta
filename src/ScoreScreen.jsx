@@ -24,14 +24,14 @@ export function ScoreScreen({ players, gameId, answers}) {
   return (
     <div className='score-screen'>
       <div className="players-answers">
-          <div className="player-section">
-            <h3>Your Answers</h3>
-            {Object.entries(answers).map(([category, answer]) => (
-            <div key={category} style={{ margin: '10px 0' }}>
-              <span>{category}: {answer}</span>
+        <div className="player-section">
+          <h3>Your Answers</h3>
+          {Object.entries(answers).map(([category, answer]) => (
+            <div key={category} className="rounds-select-wrapper">
+              <span className="rounds-label">{category}: {answer}</span>
               <select 
                 onChange={(e) => handleScoreChange(socket.id, category, e.target.value)}
-                style={{ marginLeft: '10px' }}
+                className="rounds-select"
               >
                 <option value="0">0 points</option>
                 <option value="5">5 points</option>

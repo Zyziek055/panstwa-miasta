@@ -6,13 +6,6 @@
   text-align: center;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(135deg, #3f4170 0%, #0d248d 100%);
-  min-height: 100vh;
-}
-
 /* Variables */
 :root {
   --primary-color: #2a5298;
@@ -20,6 +13,16 @@ body {
   --background-dark: #1e3c72;
   --text-light: #ffffff;
   --shadow: 0 8px 16px rgba(0,0,0,0.1);
+  --heading-font: 'Righteous', cursive;
+  --body-font: 'Poppins', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #3f4170 0%, #0d248d 100%);
+  min-height: 100vh;
+  font-family: var(--body-font);
 }
 
 /* Main container */
@@ -43,23 +46,52 @@ body {
   margin: 2rem auto;
 }
 
+.game-card h2 {
+  font-family: var(--heading-font);
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+}
+
 /* Typography */
-h1 {
+h1, h2, h3, h4 {
+  font-family: var(--heading-font);
   color: var(--text-light);
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-  color: rgba(255,255,255,0.8);
-  font-style: italic;
+  font-family: var(--body-font);
+  font-weight: 400;
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.9);
   margin-bottom: 2rem;
-  font-size: 1.1rem;
+}
+
+.category-name {
+  font-family: var(--heading-font);
+  font-size: 1.2rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 /* Buttons */
 button {
+  font-family: var(--body-font);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -83,13 +115,86 @@ button:disabled {
 }
 
 /* Form elements */
+label {
+  font-family: var(--body-font);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Odstęp między checkboxem a tekstem */
+}
+
 input {
   width: 100%;
   padding: 12px;
   margin: 8px 0;
-  border: 2px solid #ddd;
+  border: 2px solid #1a1a1a;
   border-radius: 8px;
   font-size: 1rem;
+  background: #1a1a1a;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4169e1;
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.25);
+}
+
+input:hover {
+  border-color: #3a5fad;
+}
+
+/* Stylizacja dla <select> */
+select {
+  padding: 10px;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  background-color: white;
+  font-family: var(--body-font);
+  font-size: 1rem;
+  color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+select:hover {
+  border-color: var(--secondary-color);
+}
+
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.25);
+}
+
+/* Stylizacja dla <input type="checkbox"> */
+input[type="checkbox"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--primary-color);
+  border-radius: 4px;
+  background-color: var(--primary-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  vertical-align: middle; /* Zapobiega przeskakiwaniu */
+  margin-right: 8px; /* Odstęp między checkboxem a tekstem */
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input[type="checkbox"]:checked::after {
+  content: '✔';
+  font-size: 14px;
+  color: white;
 }
 
 /* Game specific styles */
@@ -106,6 +211,84 @@ input {
   background: rgba(255,255,255,0.1);
   border-radius: 8px;
 }
+
+.player-name {
+  font-family: var(--body-font);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-light);
+}
+
+.rounds-select-wrapper {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap; /* Dla lepszej responsywności */
+}
+
+.rounds-label {
+  font-family: var(--body-font);
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-light);
+}
+
+.rounds-select {
+  padding: 10px;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  background-color: #000000; /* Czarny */
+  color: #ffffff; /* Biały tekst */
+  font-family: var(--body-font);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+
+.rounds-select:hover {
+  border-color: var(--secondary-color);
+}
+
+.rounds-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.25);
+}
+
+/* Stylizacja dla listy graczy */
+.player-list,
+.category-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem auto;
+  max-width: 400px;
+  text-align: left;
+}
+
+.player-item,
+.category-item {
+  font-family: var(--body-font);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-light);
+  padding: 10px 16px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background 0.3s ease;
+}
+
+
+
+.game-id {
+  font-family: var(--body-font);
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1rem;
+}
+
 
 /* Zachowujemy animację logo dla kompatybilności */
 @keyframes logo-spin {

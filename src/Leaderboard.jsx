@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { socket } from './socket';
 
-export function Leaderboard({ finalScores, players, resetGame}) {
+export function Leaderboard({ finalScores, players, resetGame }) {
     return (
         <div>
             <h1>Leaderboard</h1>
-            <ul>
+            <h3>Players and their scores:</h3>
+            <ul className="player-list">
                 {Object.entries(finalScores).map(([playerId, score]) => {
                     const player = players.find(p => p.id === playerId);
                     return (
-                        <li key={playerId}>
+                        <li key={playerId} className="player-item">
                             {player ? player.nickname : 'Unknown Player'}: {score}
                         </li>
                     );
@@ -19,5 +20,5 @@ export function Leaderboard({ finalScores, players, resetGame}) {
                 Exit
             </button>   
         </div>
-    )
-};
+    );
+}

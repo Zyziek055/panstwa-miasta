@@ -44,22 +44,29 @@ export function Lobby({
   return (
     <div>
       <h1>Waiting for players...</h1>
-      <p>Game ID: {gameId}</p>
+      <p className="game-id">Game ID: {gameId}</p>
+  
       <h3>Players in the game:</h3>
-      <ul>
+      <ul className="player-list">
         {(players || []).map((player) => (
-          <li key={player.id}>{player.nickname}</li>
+          <li key={player.id} className="player-item">
+            {player.nickname}
+          </li>
         ))}
       </ul>
+  
       <h3>Selected categories:</h3>
-      <ul>
+      <ul className="category-list">
         {(selectedCategories || []).map((category) => (
-          <li key={category}>{category}</li>
+          <li key={category} className="category-item">
+            {category}
+          </li>
         ))}
       </ul>
+  
       {isCreator && (
         <button onClick={handleStartGameClick}>Start Game</button>
       )}
     </div>
-  );
+  );  
 }
