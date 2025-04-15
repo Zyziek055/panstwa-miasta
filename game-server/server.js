@@ -36,6 +36,7 @@ io.on('connection', (socket) => {
       started: false,
       roundsLeft: rounds,
       submittedPoints: new Set(), // Track players who submitted points every round
+      submittedAnswers: new Set()
     };
 
     socket.join(gameId); // Join the game room 
@@ -86,8 +87,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('submitAnswers', ({ gameId }) => {
-    let timeLeft = 10;
-    const countDown = setInterval(() => {
+    const game = games[gameId];
+    game.submittedAnswers.add(socket.id);
+    console.log(game.submittedAnswers);
+    if (game.submittedAnswers.size === 1) {
+      let timeLeft = 10;
+      const countDown = setInterval(() => {
       io.to(gameId).emit('startCountdown', { timeLeft });
       timeLeft--;
   
@@ -96,6 +101,9 @@ io.on('connection', (socket) => {
         io.to(gameId).emit('roundEnded');
       }
     }, 1000);
+    } else if (game.submittedAnswers.size === game.players.length) {
+      io.to(gameId).emit('roundEnded');
+    }
   });
 
   socket.on('scoreSubmit', ({ gameId, scores})=> {
