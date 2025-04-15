@@ -103,12 +103,10 @@ io.on('connection', (socket) => {
     if (!game) return;
     if (!game.scores) game.scores = {};
     game.submittedPoints.add(socket.id); // Add player to the list of players who submitted points
-
+    
     //Sum up scores for ea
-    Object.keys(scores).forEach(category => {
-      // Convert score to number and add to existing (or 0 if no previous score)
-      game.scores[category] = (game.scores[category] || 0) + Number(scores[category]);
-    });
+    const totalScore = Object.values(scores[socket.id]).reduce((sum, value) => sum + value, 0);
+    game.scores[socket.id] = (Number(game.scores[socket.id]) || 0) + totalScore;
     
     //Check if everyone in the lobby submited their points
     if (game.submittedPoints.size === game.players.length) {
