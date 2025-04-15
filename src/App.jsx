@@ -5,6 +5,7 @@ import { Game } from './Game';
 import { Lobby } from './Lobby'; 
 import './App.css';
 import { socket } from './socket';
+import { Leaderboard } from './Leaderboard';
 
 function App() {
   const [gameMode, setGameMode] = useState('');
@@ -46,6 +47,16 @@ function App() {
     setFinalScores(scores);
     setGameMode('leaderboard');
   }
+
+  const resetGame = () => {
+    setGameMode(''); // Ustawia tryb aplikacji na początek
+    setGameId('');
+    setNickname('');
+    setPlayers([]);
+    setSelectedCategories([]);
+    setRandomLetter('');
+    setFinalScores({});
+  };
 
   return (
     <div>
@@ -90,9 +101,11 @@ function App() {
         <Game gameId={gameId} nickname={nickname} selectedCategories={selectedCategories} randomLetter={randomLetter} players={players} onGameEnded={onGameEnded}/>
       )}
       {gameMode === 'leaderboard' && (
-        <div>
-          END
-        </div>
+        <Leaderboard
+        finalScores={finalScores}
+        players={players}
+        resetGame={resetGame}
+        />
       )}
     </div>
   );
