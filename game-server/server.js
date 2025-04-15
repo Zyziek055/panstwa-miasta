@@ -112,7 +112,16 @@ io.on('connection', (socket) => {
     if (!game.scores) game.scores = {};
     game.submittedPoints.add(socket.id); // Add player to the list of players who submitted points
     
-    //Sum up scores for ea
+    //Sum up scores for ea or set score = 0 if no points were submitted
+    if (!scores || !scores[socket.id]) {
+      scores = {
+          [socket.id]: game.categories.reduce((acc, category) => {
+              acc[category] = 0;
+              return acc;
+          }, {})
+      };
+    }
+
     const totalScore = Object.values(scores[socket.id]).reduce((sum, value) => sum + value, 0);
     game.scores[socket.id] = (Number(game.scores[socket.id]) || 0) + totalScore;
     
