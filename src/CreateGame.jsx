@@ -84,9 +84,8 @@ export function CreateGame({ onCreateGame, setPlayers }) {
           <label htmlFor={category}>{category}</label>
         </div>
       ))}
-      <div>Rounds:</div>
         <div style={{ margin: '20px 0' }}>
-        <label>Number of Rounds: </label>
+        <label>Rounds: </label>
           <select 
             id="rounds"
             value={rounds}

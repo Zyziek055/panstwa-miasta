@@ -62,7 +62,7 @@ function App() {
     <div>
       {gameMode === '' && (
         <div>
-          <h1>WILKOMMEN</h1>
+          <h1>Państwa Miasta</h1>
           <button onClick={() => {
             setGameMode('create')
             console.log("Game mode changed to 'create'")}
@@ -112,3 +112,4 @@ function App() {
 }
 
 export default App;
+

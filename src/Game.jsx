@@ -75,14 +75,11 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter, playe
           <h1>Game started!</h1>
           <p>Letter: {randomLetter}</p>
         <div>
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div>
             {selectedCategories.map((category) => (
               <button 
                 key={category} 
                 onClick={() => categoryOnClick(category)}
-                style={{
-                  backgroundColor: selectedCategory === category ? 'green' : 'black'
-                }}
               >
                 {category}
               </button>
@@ -91,15 +88,13 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter, playe
           
           {/* Input field that appears when category is selected */}
           {selectedCategory && (
-            <div style={{ marginTop: '20px' }}>
+            <div >
               <label>
-                {selectedCategory}: 
                 <input
                   type="text"
                   value={answers[selectedCategory]}
                   onChange={(e) => handleAnswerChange(e, selectedCategory)}
                   placeholder={`Enter ${selectedCategory}`}
-                  style={{ marginLeft: '10px' }}
                 />
               </label>
             </div>
@@ -114,11 +109,6 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter, playe
           setSubmitted(true);
         }}
         disabled={submitted}
-        style={{
-          backgroundColor: submitted ? '#cccccc' : '#000000',
-          color: 'white',
-          cursor: submitted ? 'default' : 'pointer'
-        }}
       >
         {submitted ? 'Answers Submitted' : 'Submit Answers'}
       </button>

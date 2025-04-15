@@ -48,11 +48,6 @@ export function ScoreScreen({ players, gameId, answers}) {
           setSubmitted(true);
         }}
         disabled={submitted}
-        style={{
-          backgroundColor: submitted ? '#cccccc' : '#000000',
-          color: 'white',
-          cursor: submitted ? 'default' : 'pointer'
-        }}
       >
         {submitted ? 'Points Submitted' : 'Submit Points'}
       </button>
