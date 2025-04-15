@@ -40,8 +40,7 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter, playe
     });
 
     socket.on('gameEnded', ({scores}) => {
-      onGameEnded(scores); // Call the function passed from App component
-      console.log('Game ended, final scores:', scores);
+      onGameEnded(scores); 
     });
 
     return () => {
