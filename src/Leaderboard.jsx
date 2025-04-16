@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { socket } from './socket';
+import React from 'react';
 
 export function Leaderboard({ finalScores, players, resetGame }) {
     return (

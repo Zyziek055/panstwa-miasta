@@ -17,7 +17,6 @@ export function Game({ gameId, selectedCategories, randomLetter, players, onGame
   const [gameState, setGameState] = useState('game'); // 'game' or 'score'
   
   useEffect(() => {
-    // Tylko jeden listener do odliczania
     socket.on('startCountdown', ({ timeLeft }) => {
       setTimeLeft(timeLeft);
     });
