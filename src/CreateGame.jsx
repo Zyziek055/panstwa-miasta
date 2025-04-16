@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { socket } from './socket';
 
 export function CreateGame({ onCreateGame, setPlayers }) {
@@ -15,10 +14,7 @@ export function CreateGame({ onCreateGame, setPlayers }) {
   const defaultCategories = ['Country', 'Town'];
   const [selectedCategories, setSelectedCategories] = useState(defaultCategories);
   const [nickname, setNickname] = useState('');
-  const [gameCreated, setGameCreated] = useState(false);
-  const [gameId, setGameId] = useState('');
-  const [isCreator, setIsCreator] = useState(false);
-  const [players, setPlayersState] = useState([]);
+
   const [rounds, setRounds] = useState(1); // Default value for rounds
 
   const toggleCategory = (category) => {
