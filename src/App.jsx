@@ -18,8 +18,6 @@ function App() {
   const [finalScores, setFinalScores] = useState({}); // Store final scores for leaderboard
 
 
-
-  //TODO: understand it lol
   const createGame = (gameId, categories, isCreator = false) => {
     setGameId(gameId);
     setSelectedCategories(categories);
@@ -31,7 +29,7 @@ function App() {
   const handleGameJoined = (gameId, nickname, players, categories) => {
     console.log('Game joined:', { gameId, nickname, players, categories });
     setGameId(gameId);
-    setNickname(nickname); // Ustawiamy nickname
+    setNickname(nickname); 
     setPlayers(players);
     setSelectedCategories(categories);
     setGameMode('waiting');
@@ -49,7 +47,7 @@ function App() {
   }
 
   const resetGame = () => {
-    setGameMode(''); // Ustawia tryb aplikacji na początek
+    setGameMode('');
     setGameId('');
     setNickname('');
     setPlayers([]);
