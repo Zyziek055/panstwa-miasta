@@ -1,12 +1,20 @@
-# React + Vite
+## **Overview**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time multiplayer browser game based on the classic “Categories” or "Stop the bus" game. Built with React (Vite) on the frontend and Node.js with Socket.IO on the backend. For styling I used CSS.
+While building this project, I learned how to manage real-time communication between clients using WebSockets, handle shared state and edge cases like disconnections or duplicate answers and practied building React application with reusable components. It also gave me hands-on experience with setting up a development environment using Vite, organizing a full-stack project, and writing custom game logic from scratch.
 
-Currently, two official plugins are available:
+Although this is a multiplayer game, it’s designed to be played together in person. It can be used as a digital alternative to the traditional pen-and-paper version of the game. During the scoring phase, each player sees only their own points. This encourages discussion and interaction between players as they compare and justify their answers between rounds.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## **Preview**
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/767847a9-02df-49a3-9b6f-3aa351e90382" width="100%" style="display:inline-block" />
+</div>
+
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/5552eabf-d3bc-4813-bb8b-a24fcbfc4e7c" width="49%" style="display:inline-block" />
+  <img src="https://github.com/user-attachments/assets/f50c1bce-0d5e-40ab-95f1-bb7913807f1f" width="49%" style="display:inline-block"/>
+</div>
+
+
