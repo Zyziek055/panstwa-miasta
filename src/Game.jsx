@@ -4,7 +4,7 @@ import { ScoreScreen } from './ScoreScreen';
 
 
 //create game component
-export function Game({ gameId, nickname, selectedCategories, randomLetter, players, onGameEnded }) {
+export function Game({ gameId, selectedCategories, randomLetter, players, onGameEnded }) {
   const [selectedCategory, setSelectedCategory] = useState(selectedCategories[0]);
   const [answers, setAnswers] = useState(
     selectedCategories.reduce((acc, category) => {
@@ -15,7 +15,6 @@ export function Game({ gameId, nickname, selectedCategories, randomLetter, playe
   const [submitted, setSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
   const [gameState, setGameState] = useState('game'); // 'game' or 'score'
-  const [allAnswers, setAllAnswers] = useState({}); // Store all answers from players
   
   useEffect(() => {
     // Tylko jeden listener do odliczania

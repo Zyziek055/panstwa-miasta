@@ -3,7 +3,7 @@ import { socket } from './socket';
 
 export function Lobby({ 
   gameId, 
-  players, // Add default empty array
+  players, 
   setPlayers, 
   selectedCategories = [], // Add default empty array
   isCreator, 
@@ -39,7 +39,6 @@ export function Lobby({
     };
   }, [gameId, handlePlayerJoined, onStartGame]);
 
-  //TODO: add functionalities etc
 
   return (
     <div>

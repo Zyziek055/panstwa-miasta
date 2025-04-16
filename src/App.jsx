@@ -96,7 +96,7 @@ function App() {
         />
       )}
       {gameMode === 'game' && (
-        <Game gameId={gameId} nickname={nickname} selectedCategories={selectedCategories} randomLetter={randomLetter} players={players} onGameEnded={onGameEnded}/>
+        <Game gameId={gameId} selectedCategories={selectedCategories} randomLetter={randomLetter} players={players} onGameEnded={onGameEnded}/>
       )}
       {gameMode === 'leaderboard' && (
         <Leaderboard

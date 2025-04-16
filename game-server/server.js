@@ -9,7 +9,7 @@ const io = new Server(server, {
   },
 });
 
-// Function to generate a unique game ID
+// Function to generate a unique game ID (I know it should be more unique, but this is just a demo)
 const generateGameId = () => {
   return `${Math.floor(1000 + Math.random() * 9000)}`;
 };
@@ -20,7 +20,7 @@ const generateLetter = () => {
   return letters[randomIndex];
 }
 
-const games = {}; // Store game dat
+const games = {}; // Store game data
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 

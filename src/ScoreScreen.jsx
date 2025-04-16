@@ -1,20 +1,19 @@
 import React, { useState} from 'react';
 import { socket } from './socket'; 
 
-export function ScoreScreen({ players, gameId, answers}) {
+export function ScoreScreen({ gameId, answers}) {
   const [scores, setScores] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
   const handleScoreChange = (playerId, category, score) => {
     setScores(prevScores => {
-      // Inicjalizuj obiekt dla gracza jeśli nie istnieje
       const playerScores = prevScores[playerId] || {};
       
       const newScores = {
         ...prevScores,
         [playerId]: {
           ...playerScores,
-          [category]: Number(score) // Konwertuj na liczbę
+          [category]: Number(score) // Number(score) converts score to a number
         }
       };
       return newScores;
