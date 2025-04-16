@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { socket } from './socket';
-import { ScoreScreen } from './ScoreScreen';
+import { socket } from '../socket';
+import { ScoreScreen } from '../ScoreScreen';
 
 
 //create game component

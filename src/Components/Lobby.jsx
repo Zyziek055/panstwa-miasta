@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { socket } from './socket';
+import { socket } from '../socket';
 
 export function Lobby({ 
   gameId, 

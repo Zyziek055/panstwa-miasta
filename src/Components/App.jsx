@@ -4,7 +4,7 @@ import { JoinGame } from './JoinGame';
 import { Game } from './Game';
 import { Lobby } from './Lobby'; 
 import './App.css';
-import { socket } from './socket';
+import { socket } from '../socket';
 import { Leaderboard } from './Leaderboard';
 
 function App() {

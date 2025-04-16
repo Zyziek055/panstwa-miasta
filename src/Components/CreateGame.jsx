@@ -1,4 +1,4 @@
-import { socket } from './socket';
+import { socket } from '../socket';
 
 export function CreateGame({ onCreateGame, setPlayers }) {
   const categoriesList = [

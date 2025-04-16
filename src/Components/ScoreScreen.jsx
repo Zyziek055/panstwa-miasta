@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import { socket } from './socket'; 
+import { socket } from '../Socket/socket'; 
 
 export function ScoreScreen({ gameId, answers}) {
   const [scores, setScores] = useState({});
